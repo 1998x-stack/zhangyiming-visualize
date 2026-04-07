@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .masonry-grid {
+    columns: 1;
+    column-gap: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .masonry-grid {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .masonry-grid {
+      columns: 3;
+    }
+  }
+
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 1.25rem;
+  }
+
+  .quote-card {
+    @apply relative bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark p-5 transition-all duration-200;
+    border-left: 3px solid transparent;
+  }
+
+  .quote-card:hover {
+    @apply shadow-sm;
+  }
+
+  .quote-card.section-growth {
+    border-left-color: #2563EB;
+  }
+
+  .quote-card.section-growth:hover {
+    border-left-color: #1d4ed8;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);
+  }
+
+  .quote-card.section-management {
+    border-left-color: #7C3AED;
+  }
+
+  .quote-card.section-management:hover {
+    border-left-color: #6d28d9;
+    box-shadow: 0 1px 3px rgba(124, 58, 237, 0.08);
+  }
+
+  .quote-card.section-business {
+    border-left-color: #059669;
+  }
+
+  .quote-card.section-business:hover {
+    border-left-color: #047857;
+    box-shadow: 0 1px 3px rgba(5, 150, 105, 0.08);
+  }
+
+  .dark .quote-card.section-growth:hover {
+    box-shadow: 0 1px 3px rgba(59, 130, 246, 0.12);
+  }
+
+  .dark .quote-card.section-management:hover {
+    box-shadow: 0 1px 3px rgba(139, 92, 246, 0.12);
+  }
+
+  .dark .quote-card.section-business:hover {
+    box-shadow: 0 1px 3px rgba(16, 185, 129, 0.12);
+  }
+}
