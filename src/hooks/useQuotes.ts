@@ -22,7 +22,7 @@ export function useQuotes(): UseQuotesResult {
       try {
         setLoading(true)
         setError(null)
-        const response = await fetch('/zhangyiming_weibo_tagged.jsonl')
+        const response = await fetch(`${import.meta.env.BASE_URL}zhangyiming_weibo_tagged.jsonl`)
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`)
         }
