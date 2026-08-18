@@ -1,5 +1,7 @@
 # 张一鸣微博语录可视化
 
+> **English TL;DR:** An interactive visualization of 231 of Zhang Yiming's Weibo quotes on entrepreneurship & growth (2010–2020) — structured, tagged/classified, and presented with Swiss-minimalist design as a searchable knowledge graph in a modern web page.
+
 > 231条创业与成长思考 · 交互式知识图谱
 
 ![张一鸣微博语录](assets/screenshot.png)
