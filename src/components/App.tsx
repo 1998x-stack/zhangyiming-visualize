@@ -1,5 +1,5 @@
-import { useReducer, useMemo } from 'react'
-import type { SectionKey } from '../types'
+import { useCallback, useMemo, useReducer, useState } from 'react'
+import type { QuoteEntry, SectionKey } from '../types'
 import { useQuotes } from '../hooks/useQuotes'
 import { useTheme } from '../hooks/useTheme'
 import { useFilter } from '../hooks/useFilter'
@@ -11,6 +11,7 @@ import { QuoteGrid } from './QuoteGrid'
 import { EmptyState } from './EmptyState'
 import { TagFilter } from './TagFilter'
 import { InsightsDashboard } from './InsightsDashboard'
+import { CardStudio } from './CardStudio'
 
 interface AppState {
   section: SectionKey
@@ -43,6 +44,8 @@ export default function App() {
   const [state, dispatch] = useReducer(reducer, {
     section: 'all', search: '', activeTag: null,
   })
+  const [selectedQuote, setSelectedQuote] = useState<QuoteEntry | null>(null)
+  const closeStudio = useCallback(() => setSelectedQuote(null), [])
   const [theme, toggleTheme] = useTheme()
   const { data, loading, error, retry } = useQuotes()
   const filtered = useFilter(data, state.section, state.search, state.activeTag)
@@ -72,7 +75,7 @@ export default function App() {
         sectionCounts={sectionCounts}
       />
 
-      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+      <main id="main-content" className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
         {showHero && <Hero stats={stats} totalCount={corpus.total} />}
 
         {loading && (
@@ -93,19 +96,24 @@ export default function App() {
               onSectionChange={(section) => dispatch({ type: 'SET_SECTION', payload: section })}
               onTagSelect={(tag) => dispatch({ type: 'SET_TAG', payload: tag })}
             />
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-              <h2 className="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">语录原文 <span className="text-sm font-normal tabular-nums text-text-muted-light dark:text-text-muted-dark">({filtered.length})</span></h2>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="mb-1 text-xs font-semibold uppercase tracking-[.18em] text-text-muted-light dark:text-text-muted-dark">Read / Create / Share</p>
+                <h2 className="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">语录原文 <span className="text-sm font-normal tabular-nums text-text-muted-light dark:text-text-muted-dark">({filtered.length})</span></h2>
+                <p className="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">每条语录都可以复制文字，或制作成可分享的图片卡片。</p>
+              </div>
               {hasFilters && (
-                <button type="button" onClick={() => dispatch({ type: 'RESET' })} className="rounded border border-border-light dark:border-border-dark px-3 py-1.5 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-zinc-100 dark:hover:bg-zinc-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500">清除全部筛选</button>
+                <button type="button" onClick={() => dispatch({ type: 'RESET' })} className="rounded border border-border-light px-3 py-1.5 text-sm text-text-primary-light hover:bg-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 dark:border-border-dark dark:text-text-primary-dark dark:hover:bg-zinc-800">清除全部筛选</button>
               )}
             </div>
             {allTags.length > 0 && <TagFilter tags={allTags} activeTag={state.activeTag} onTagSelect={(tag) => dispatch({ type: 'SET_TAG', payload: tag })} />}
             {filtered.length === 0
               ? <EmptyState type="empty" topKeywords={stats?.topKeywords ?? []} />
-              : <QuoteGrid entries={filtered} />}
+              : <QuoteGrid entries={filtered} onCreateCard={setSelectedQuote} />}
           </>
         )}
       </main>
+      {selectedQuote && <CardStudio quote={selectedQuote} onClose={closeStudio} />}
     </div>
   )
 }

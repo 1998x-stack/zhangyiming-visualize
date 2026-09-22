@@ -1,17 +1,16 @@
-import { QuoteEntry } from '../types'
+import type { QuoteEntry } from '../types'
 import { QuoteCard } from './QuoteCard'
 
 interface QuoteGridProps {
   entries: QuoteEntry[]
+  onCreateCard: (quote: QuoteEntry) => void
 }
 
-export function QuoteGrid({ entries }: QuoteGridProps) {
+export function QuoteGrid({ entries, onCreateCard }: QuoteGridProps) {
   return (
-    <div className="masonry-grid pb-16">
-      {entries.map((entry, i) => (
-        <div key={entry.global_id} className="masonry-item" style={{ animationDelay: `${Math.min(i * 30, 300)}ms` }}>
-          <QuoteCard quote={entry} />
-        </div>
+    <div id="quotes" className="masonry-grid scroll-mt-32 pb-16">
+      {entries.map((entry) => (
+        <QuoteCard key={entry.global_id} quote={entry} onCreateCard={onCreateCard} />
       ))}
     </div>
   )
