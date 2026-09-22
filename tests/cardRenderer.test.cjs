@@ -36,7 +36,7 @@ test('preserves paragraph boundaries and blank lines', () => {
 })
 
 test('long quotes paginate losslessly in all aspect ratios and font sizes', () => {
-  const text = '实践复盘持续学习。'.repeat(90)
+  const text = '实践复盘持续学习。'.repeat(400)
   for (const ratio of Object.keys(CARD_RATIOS)) {
     for (const fontSize of ['small', 'medium', 'large']) {
       const layout = layoutCard(context, text, { ...DEFAULT_CARD_OPTIONS, ratio, fontSize })
