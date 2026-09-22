@@ -25,7 +25,7 @@ React 18、TypeScript、Vite 6、Tailwind CSS 3 和 Lucide React。可视化采�
 
 ## 本地开发
 
-需要 Node.js 20 和 Python 3.11（Python 仅用于校验与测试）。
+需要 Node.js 20 和 Python 3.11（Python 仅用于数据校验与对应回归测试）。
 
 ```bash
 git clone https://github.com/1998x-stack/zhangyiming-visualize.git
@@ -39,11 +39,12 @@ npm run dev
 ```bash
 python3 data/scripts/validate_data.py
 python3 -m unittest discover -s tests -p 'test_*.py' -v
+npm test
 npm run build
 npm run preview
 ```
 
-`npm run build` 执行 TypeScript 类型检查并生成 `dist/`。数据校验脚本检查必需字段、编号唯一性及 `data/` 与 `public/` 语料副本一致性。
+`npm test` 使用 Node.js 内置测试运行器检查数据聚合和客户端 JSONL 解析；`npm run build` 执行 TypeScript 类型检查并生成 `dist/`。数据校验脚本检查必需字段、编号唯一性及 `data/` 与 `public/` 语料副本一致性。
 
 ## 代码结构
 
@@ -51,6 +52,7 @@ npm run preview
 - `src/utils/insights.ts`：与 React 分离的分类/标签聚合逻辑。
 - `src/hooks/useFilter.ts`：所有可视化与列表共用的筛选规则。
 - `src/utils/parseJsonl.ts`：客户端运行时结构校验和错误定位。
+- `tests/insights.test.cjs`：数据聚合及客户端解析的前端回归测试。
 - `data/scripts/validate_data.py`、`tests/test_data.py`：独立于前端的数据检查与回归测试。
 - `.github/workflows/ci.yml`：对 PR 和主分支执行数据校验、测试及生产构建。
 - `.github/workflows/deploy.yml`：`main` 分支通过验证及构建后发布 GitHub Pages。
