@@ -40,7 +40,7 @@ export interface CardLayout {
   lineHeight: number
 }
 
-/** Wrap by measured grapheme width, preserving explicit paragraphs and never dropping a character. */
+/** Wrap using measured Unicode code points; preserve all characters and explicit paragraphs. */
 export function wrapCardText(text: string, maxWidth: number, measure: (value: string) => number): string[] {
   const lines: string[] = []
   for (const paragraph of text.replace(/\r\n?/g, '\n').split('\n')) {
@@ -59,14 +59,16 @@ export function wrapCardText(text: string, maxWidth: number, measure: (value: st
   return lines.length ? lines : ['']
 }
 
-/** Layout and exported bitmap share the same canvas metrics to avoid preview/export clipping. */
+/** The last line must finish above the optional tag chips with generous clearance. */
 export function layoutCard(ctx: CanvasRenderingContext2D, content: string, options: CardOptions): CardLayout {
   const { width, height } = CARD_RATIOS[options.ratio]
   const fontSize = FONT_SIZES[options.fontSize]
   const lineHeight = Math.round(fontSize * 1.72)
   ctx.font = `500 ${fontSize}px ${FONT_STACK}`
   const lines = wrapCardText(content, width - 192, (text) => ctx.measureText(text).width)
-  const maxLines = Math.max(1, Math.floor((height - 565) / lineHeight))
+  // Main text begins at 340px; footer is height - 184px and chips begin 70px above it.
+  // Reserve at least 36px between text lines and the first chip across every ratio/size.
+  const maxLines = Math.max(1, Math.floor((height - 630) / lineHeight))
   const pages: string[][] = []
   for (let offset = 0; offset < lines.length; offset += maxLines) {
     pages.push(lines.slice(offset, offset + maxLines))
@@ -94,7 +96,6 @@ export function renderCard(canvas: HTMLCanvasElement, quote: QuoteEntry, options
   ctx.fillStyle = palette.background
   ctx.fillRect(0, 0, layout.width, layout.height)
 
-  // Decorative shapes never carry textual meaning.
   ctx.fillStyle = palette.panel
   ctx.beginPath()
   ctx.arc(layout.width + 54, -60, 315, 0, 2 * Math.PI)
