@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { QuoteEntry, SectionKey } from '../types'
-import { SECTION_LABELS, SECTION_MAP } from '../types'
+import { SECTION_MAP } from '../types'
 import { computeInsights } from '../utils/insights'
 
 interface InsightsDashboardProps {
@@ -97,7 +97,7 @@ export function InsightsDashboard({
         <div className="rounded-lg border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark p-5 sm:p-6">
           <div className="flex items-baseline justify-between gap-2">
             <h3 className="font-semibold text-text-primary-light dark:text-text-primary-dark">热门主题标签</h3>
-            <span className="text-xs text-text-muted-light dark:text-text-muted-dark">前 12 项</span>
+            <span className="text-xs text-text-muted-light dark:text-text-muted-dark">前 12 项{popularTags.length > 12 ? '及当前选中项' : ''}</span>
           </div>
           <p className="mt-1 mb-4 text-xs text-text-muted-light dark:text-text-muted-dark">
             当前分类及搜索范围内共 {sectionScope.tagCounts.length} 种标签；一条语录可以属于多个标签。
@@ -149,7 +149,7 @@ export function InsightsDashboard({
           )}
         </div>
       )}
-      <p className="mt-3 text-xs text-text-muted-light dark:text-text-muted-dark">标签来自规则生成的数据集，仅表示此语料内的出现及共现频次，不代表全部公开言论或作者观点的重要程度。</p>
+      <p className="mt-3 text-xs text-text-muted-light dark:text-text-muted-dark">标签来自自动标注的数据集，仅表示此语料内的出现及共现频次，不代表全部公开言论或作者观点的重要程度。</p>
     </section>
   )
 }
